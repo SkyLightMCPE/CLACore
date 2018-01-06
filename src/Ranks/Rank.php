@@ -10,6 +10,8 @@ use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\event\player\PlayerChatEvent;
+use pocketmine\event\server\DataPacketReceiveEvent;
+use pocketmine\network\mcpe\protocol\LoginPacket;
 
 use pocketmine\utils\Config;
 
@@ -21,6 +23,13 @@ class Rank implements Listener{
     
     public function __construct(Core $core){
         $this->core = $core;
+    }
+    
+    public function onPacketReceived(DataPacketReceiveEvent $event) {
+        if($event->getPacket() instanceof LoginPacket) {
+            $pk = $event->getPacket();
+            $this->PlayerData[$pk->username] = $pk->clientData;
+        }
     }
 
     public function onLogin(PlayerLoginEvent $e){
@@ -42,101 +51,103 @@ class Rank implements Listener{
         $name = $player->getName();
         $rankcfg = new Config($this->core->getDataFolder() . "rank.yml", Config::YAML);
         $rank = $rankcfg->get($name);
+        $os = ["Unknown", "Android", "iOS", "macOS", "FireOS", "GearVR", "HoloLens", "Windows 10", "Windows", "Dedicated", "Orbis", "NX"];
+        $data = $this->PlayerData[$player->getName()];
 
         ## Default ##
         $deftag = $rankcfg->get("Default-Tag");
         $deftag = str_replace("{name}", $name, $deftag);
-        $player->setNameTag($deftag);
+        $player->setNameTag("[" . $os[$data["DeviceOS"]] . "]" . $deftag);
 
         ## VIP ##
         if($rank == "VIP"){
             $viptag = $rankcfg->get("VIP-Tag");
             $viptag = str_replace("{name}", $name, $viptag);
-            $player->setNameTag($viptag);
+            $player->setNameTag("[" . $os[$data["DeviceOS"]] . "]" . $viptag);
         }
 
         ## VIP+ ##
         if($rank == "VIP+"){
             $vipplustag = $rankcfg->get("VIP+-Tag");
             $vipplustag = str_replace("{name}", $name, $vipplustag);
-            $player->setNameTag($vipplustag);
+            $player->setNameTag("[" . $os[$data["DeviceOS"]] . "]" . $vipplustag);
         }
 
         ## MVP ##
         if($rank == "MVP"){
             $mvptag = $rankcfg->get("MVP-Tag");
             $mvptag = str_replace("{name}", $name, $mvptag);
-            $player->setNameTag($mvptag);
+            $player->setNameTag("[" . $os[$data["DeviceOS"]] . "]" . $mvptag);
         }
 
         ## MVP+ ##
         if($rank == "MVP+"){
             $mvpplustag = $rankcfg->get("MVP+-Tag");
             $mvpplustag = str_replace("{name}", $name, $mvpplustag);
-            $player->setNameTag($mvpplustag);
+            $player->setNameTag("[" . $os[$data["DeviceOS"]] . "]" . $mvpplustag);
         }
 
         ## YouTuber ##
         if($rank == "YouTuber"){
             $yttag = $rankcfg->get("YouTuber-Tag");
             $yttag = str_replace("{name}", $name, $yttag);
-            $player->setNameTag($yttag);
+            $player->setNameTag("[" . $os[$data["DeviceOS"]] . "]" . $yttag);
         }
 
         ## Creator ##
         if($rank == "Creator"){
             $creatortag = $rankcfg->get("Creator-Tag");
             $creatortag = str_replace("{name}", $name, $creatortag);
-            $player->setNameTag($creatortag);
+            $player->setNameTag("[" . $os[$data["DeviceOS"]] . "]" . $creatortag);
         }
 
         ## Owner ##
         if($rank == "Owner"){
             $ownertag = $rankcfg->get("Owner-Tag");
             $ownertag = str_replace("{name}", $name, $ownertag);
-            $player->setNameTag($ownertag);
+            $player->setNameTag("[" . $os[$data["DeviceOS"]] . "]" . $ownertag);
         }
 
         ## CoOwner ##
         if($rank == "CoOwner"){
             $coownertag = $rankcfg->get("CoOwner-Tag");
             $coownertag = str_replace("{name}", $name, $coownertag);
-            $player->setNameTag($coownertag);
+            $player->setNameTag("[" . $os[$data["DeviceOS"]] . "]" . $coownertag);
         }
 
         ## Admin ##
         if($rank == "Admin"){
             $admintag = $rankcfg->get("Admin-Tag");
             $admintag = str_replace("{name}", $name, $admintag);
-            $player->setNameTag($admintag);
+            $player->setNameTag("[" . $os[$data["DeviceOS"]] . "]" . $admintag);
         }
 
         ## Mod ##
         if($rank == "Mod"){
             $modtag = $rankcfg->get("Mod-Tag");
             $modtag = str_replace("{name}", $name, $modtag);
-            $player->setNameTag($modtag);
+            $player->setNameTag("[" . $os[$data["DeviceOS"]] . "]" . $modtag);
         }
 
         ## Developer ##
         if($rank == "Developer"){
             $devtag = $rankcfg->get("Developer-Tag");
             $devtag = str_replace("{name}", $name, $devtag);
-            $player->setNameTag($devtag);
+            $player->setNameTag("[" . $os[$data["DeviceOS"]] . "]" . $devtag);
         }
 
         ## Helper ##
         if($rank == "Helper"){
             $helpertag = $rankcfg->get("Helper-Tag");
             $helpertag = str_replace("{name}", $name, $helpertag);
-            $player->setNameTag($helpertag);
+            $player->setNameTag("[" . $os[$data["DeviceOS"]] . "]" . $helpertag);
         }
 
         ## Staff ##
         if($rank == "Staff"){
             $stafftag = $rankcfg->get("Staff-Tag");
             $stafftag = str_replace("{name}", $name, $stafftag);
-            $player->setNameTag($stafftag);
+            $player->setNameTag("[" . $os[$data["DeviceOS"]] . "]" . $stafftag);
         }
     }
 
